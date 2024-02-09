@@ -1,24 +1,28 @@
-#include <stdio.h>
-#include "Animal.h"
-#include "Dog.h"
-#include "Cat.h"
+#include <iostream>
+#include <string>
+#include <chrono>
+#include <Windows.h>
 
+int main(void) {
+    std::string a(100000, 'a');
 
-int main() {
+    {
+        auto start = std::chrono::steady_clock::now();
+        std::string copy = a;
+        auto end = std::chrono::steady_clock::now();
 
-	Animal* animal_[2] ;
-	for (int i = 0; i < 2; i++){
-		if (i < 1) {
-			animal_[i] = new Dog;
-		}
-		else {
-			animal_[i] = new Cat;
-		}
-	}
+        auto duration = end - start;
+        std::cout << "コピーにかかった時間: " << duration.count() << " マイクロ秒" << std::endl;
+    }
 
-	for (int i = 0; i < 2; i++) {
-		animal_[i]->Cry();
-	}
+    {
+        auto start = std::chrono::steady_clock::now();
+        std::string move = std::move(a);
+        auto end = std::chrono::steady_clock::now();
 
-	return 0;
+        auto duration = end - start;
+        std::cout << "移動にかかった時間: " << duration.count() << " マイクロ秒" << std::endl;
+    }
+
+    return 0;
 }
